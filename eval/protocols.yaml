@@ -1,0 +1,84 @@
+# Evaluation protocols for scripts/eval_lm.sh.
+#
+# A protocol fixes the shared runtime settings: backend and vLLM model
+# arguments, batch size, seeds, chat template handling, and the library
+# versions it was defined with. Changing any of them means a new protocol name
+# (bump the -v<N> suffix); never edit an existing protocol's settings.
+#
+# `tasks` maps a spec name (the result directory name, eval/<protocol>/<spec>/)
+# to an lm-eval task and an optional few-shot override; without `num_fewshot`
+# the task's registered default is used. The task list is append-only: adding
+# a spec keeps the protocol version, changing an existing spec is forbidden
+# (add a new spec name instead). Specs of one protocol must not share lm-eval
+# leaf tasks unless they name the same task with different settings (those run
+# in separate lm-eval passes).
+#
+# `libraries` are the versions the protocol was defined with. A run records the
+# versions it actually used and whether they match; it does not refuse to run.
+# The vLLM data_parallel_size is not part of a protocol: it is the number of
+# visible GPUs and is recorded per run.
+
+lm-eval-vllm-v1:
+  backend: vllm
+  libraries:
+    lm_eval: "0.4.12"
+    vllm: "0.19.1"
+  model_args:
+    dtype: bfloat16
+    trust_remote_code: true
+    tensor_parallel_size: 1
+    gpu_memory_utilization: 0.85
+    max_model_len: 8192
+    # vLLM 0.19.1 async scheduling raced on prompt logprobs (loglikelihood
+    # tasks): replicas hung or returned undecodable logprob tensors.
+    async_scheduling: false
+  batch_size: auto
+  # lm-eval's own defaults, passed explicitly.
+  seeds:
+    random_seed: 0
+    numpy_random_seed: 1234
+    torch_random_seed: 1234
+    fewshot_random_seed: 1234
+  apply_chat_template: false
+  fewshot_as_multiturn: false
+  tasks:
+    wmdp_bio: {task: wmdp_bio}
+    wmdp_cyber: {task: wmdp_cyber}
+    mmlu: {task: mmlu}
+    arc_challenge-25shot: {task: arc_challenge, num_fewshot: 25}
+    hellaswag-10shot: {task: hellaswag, num_fewshot: 10}
+    gsm8k-5shot: {task: gsm8k, num_fewshot: 5}
+
+ifeval-chat-v1:
+  backend: vllm
+  libraries:
+    lm_eval: "0.4.12"
+    vllm: "0.19.1"
+  model_args:
+    dtype: bfloat16
+    trust_remote_code: true
+    tensor_parallel_size: 1
+    gpu_memory_utilization: 0.85
+    max_model_len: 8192
+    async_scheduling: false
+    # Instruction following is evaluated non-thinking.
+    enable_thinking: false
+  batch_size: auto
+  seeds:
+    random_seed: 0
+    numpy_random_seed: 1234
+    torch_random_seed: 1234
+    fewshot_random_seed: 1234
+  apply_chat_template: true
+  fewshot_as_multiturn: true
+  # The Gemma 4 checkpoints carry no chat template (Swift training uses its
+  # built-in one). For them only, an evaluation-only tokenizer copy gets this
+  # Swift-equivalent single-user, text-only, non-thinking template; the
+  # checkpoint itself is not changed. Any other model without a template fails.
+  chat_template_fallback:
+    model_type: gemma4
+    template: chat_templates/gemma4_ifeval.jinja
+    sha256: 03aba1ab30a865c001b869b567f72ba819239d6b77064338fc134f78c67eaec1
+    source: swift.Gemma4TemplateMeta:single_user_non_thinking
+  tasks:
+    ifeval: {task: ifeval}

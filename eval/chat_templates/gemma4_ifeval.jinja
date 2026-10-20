@@ -1,0 +1,8 @@
+{# Text-only single-user inference, matching Swift Gemma4TemplateMeta with enable_thinking=False. #}
+{%- if enable_thinking is not defined or enable_thinking != false -%}
+    {{- raise_exception('Gemma4 IFEval fallback requires enable_thinking=False') -}}
+{%- endif -%}
+{%- if tools or messages|length != 1 or messages[0]['role'] != 'user' or messages[0]['content'] is not string or not add_generation_prompt -%}
+    {{- raise_exception('Gemma4 IFEval fallback supports one text user prompt with generation only') -}}
+{%- endif -%}
+{{- bos_token + '<|turn>user\n' + messages[0]['content'] + '<turn|>\n<|turn>model\n<|channel>thought\n<channel|>' -}}

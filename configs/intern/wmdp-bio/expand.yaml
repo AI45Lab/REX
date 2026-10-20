@@ -1,0 +1,11 @@
+# Public method example; supply your own data. Research data recipes are not released.
+num_new_experts: 8
+control_weight: 1.0
+seed: 42
+epsilon: 1.0e-05
+source_expert_scale: 0.5
+routing_stats:
+  text_column: content
+  long_document_policy: chunk
+  max_length: 2048
+  batch_size: 4

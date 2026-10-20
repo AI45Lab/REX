@@ -1,0 +1,91 @@
+# Public method example; supply your own data. Research data recipes are not released.
+seed: 42
+lm_eval_random_seed: 42
+lm_eval_numpy_seed: 42
+lm_eval_torch_seed: 42
+lm_eval_fewshot_seed: 42
+distributed_timeout_seconds: 21600
+micro_batch_size: 4
+gradient_accumulation_steps: 1
+max_tokens: 272981950
+split_token_budgets:
+  std: 109192780
+  harmful: 163789170
+max_seq_length: 4096
+loss_chunk_size: 256
+max_norm: 1.0
+routing_loss_weight_std: 1.0
+routing_loss_weight_harmful: 6.0
+routing_harmful_mass_floor: 0.75
+routing_std_mass_ceiling: 0.02
+routing_loss_type: relu
+routing_std_rank_loss_weight: 30.0
+routing_std_rank_margin: 0.1
+lr: 1.0e-06
+weight_decay: 0.0
+betas:
+- 0.9
+- 0.999
+min_lr: 0.0
+lr_warmup_steps: 0
+scheduler_total_steps: 2182
+std_router_lr_multiplier: 40.0
+std_expert_lr_multiplier: 1.0
+harmful_router_lr_multiplier: 60.0
+harmful_expert_lr_multiplier: 0.0
+wandb_project: rex
+save_token_milestones: []
+log_interval: 20
+lm_eval_tasks:
+- wmdp_bio
+- mmlu
+lm_eval_limit: null
+lm_eval_task_limits:
+  wmdp_bio: null
+  mmlu: null
+lm_eval_interval: 0
+lm_eval_token_milestones:
+- 27298195
+- 68245488
+- 136490975
+- 204736463
+- 272981950
+lm_eval_batch_size: 4
+lm_eval_cache_requests: true
+lm_eval_bootstrap_iters: 0
+lm_eval_log_samples: false
+final_validation: false
+num_workers: 4
+pin_memory: true
+xtuner:
+  cache_dir: .cache/xtuner/qwen
+  prewarm_metadata_cache: true
+  prewarm_roles:
+  - std
+  - harmful
+  prewarm_workers: 32
+  prewarm_log_interval: 1
+  pack_level: soft
+  pack_max_length: 4096
+  pack_to_max_length: true
+  pack_chunk_size: 10000
+  pack_workers: 4
+  pack_extra_buffer_size: 100
+  global_pack: false
+  group_by_length: true
+  round_up: true
+  add_eos_token: true
+  add_bos_token: false
+datasets:
+  retain:
+    path: data/user-retain.jsonl
+    role: std
+    data_format_type: pretrain_text_column
+    text_column: text
+    label_weight: 1.0
+  target:
+    path: data/user-target.jsonl
+    role: harmful
+    data_format_type: pretrain_text_column
+    text_column: text
+    label_weight: 1.0

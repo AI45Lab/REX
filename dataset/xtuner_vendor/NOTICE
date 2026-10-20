@@ -1,0 +1,14 @@
+XTuner data-pipeline components
+Copyright (c) OpenMMLab. All rights reserved.
+Upstream: https://github.com/InternLM/xtuner
+License: Apache-2.0 (included as LICENSE in this directory).
+
+This is a modified, vendored subset, not an unmodified XTuner release.
+The original upstream commit was not recorded when these files were imported;
+we do not claim a specific upstream version. The imported snapshot is retained
+in the internal development history. Public changes include adapted imports,
+local distributed/logging helpers, long-document tokenization, reduced
+text-only data support, and REX cache/logging names.
+
+Existing per-file copyright notices have been retained. Subsequent REX
+modifications: Copyright 2026 Shanghai AI Laboratory.

@@ -1,0 +1,69 @@
+# Public method example; supply your own data. Research data recipes are not released.
+seed: 42
+distributed_timeout_seconds: 21600
+target_domain: wmdp_cyber
+micro_batch_size: 1
+gradient_accumulation_steps: 4
+selective_activation_checkpointing: false
+max_seq_length: 4096
+max_norm: 1.0
+gradient_checkpointing: false
+rmu_monitor_layer_indices:
+- 9
+rmu_trainable_layer_indices:
+- 7
+- 8
+- 9
+rmu_trainable_scope: selected_routed_and_shared_expert_mlp
+rmu_token_mask: labels
+rmu_max_tokens_per_batch: 0
+rmu_loss_reduction: sequence_mean
+rmu_loss_compute_dtype: activation
+rmu_steering_coeff: 300.0
+rmu_target_seed: 42
+rmu_forget_loss_weight: 1.0
+rmu_retain_loss_weight: 350.0
+lr: 1.0e-05
+weight_decay: 0.0
+betas:
+- 0.9
+- 0.999
+min_lr: 1.0e-05
+lr_warmup_steps: 0
+wandb_project: rex
+log_interval: 20
+num_workers: 4
+pin_memory: true
+xtuner:
+  cache_dir: .cache/xtuner/intern
+  prewarm_metadata_cache: true
+  prewarm_roles:
+  - std
+  - harmful
+  prewarm_workers: 32
+  prewarm_log_interval: 1
+  pack_level: soft
+  pack_max_length: 4096
+  pack_to_max_length: true
+  pack_chunk_size: 10000
+  pack_workers: 4
+  pack_extra_buffer_size: 100
+  global_pack: false
+  group_by_length: true
+  round_up: true
+  add_eos_token: true
+  add_bos_token: false
+datasets:
+  retain:
+    path: data/user-retain.jsonl
+    role: std
+    data_format_type: pretrain_text_column
+    text_column: text
+    label_weight: 1.0
+  target:
+    path: data/user-target.jsonl
+    role: harmful
+    data_format_type: pretrain_text_column
+    text_column: text
+    label_weight: 1.0
+max_forget_tokens: 13638264

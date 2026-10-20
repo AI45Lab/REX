@@ -1,0 +1,11 @@
+[project]
+name = "rex-evaluation"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.10.0", "vllm==0.19.1", "lm-eval[hf,ifeval]==0.4.12",
+    "transformers==5.8.0", "pyyaml==6.0.3", "sentencepiece==0.2.1", "rdkit==2026.3.2",
+]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]

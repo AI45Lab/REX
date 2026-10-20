@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and local config
+.venv/
+.venv-eval/
+.venv-*/
+venv/
+env/
+.env
+.env.*
+.secrets/
+uv.toml
+
+# uv / packaging
+.python-version
+build/
+dist/
+*.egg-info/
+
+# Jupyter / editor state
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.agents/
+.codex/
+.claude/
+.aws/
+*.swp
+*.swo
+
+# Experiment artifacts
+runs/
+results/
+checkpoints/
+logs/
+wandb/
+data
+data/
+data/.cache*/
+*.pid
+nohup.out
+.cache
+
+# Model and dataset binaries
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.arrow
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Private platform tooling, data references, recipes and work records
+/internal/
+
+# Independent paper repository, kept at the project root
+/report/

@@ -1,0 +1,36 @@
+[project]
+name = "rex"
+version = "0.1.0"
+description = "REX: knowledge removal in mixture-of-experts language models"
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "accelerate==1.13.0",
+    # TileLang 0.1.10's bundled TVM conflicts with newer FFI type registration.
+    "apache-tvm-ffi==0.1.11",
+    "boto3==1.43.26",
+    "causal-conv1d==1.6.2.post1",
+    "decord==0.6.0",
+    "datasets==4.8.5",
+    "flash-linear-attention==0.5.0",
+    "lm_eval[hf,ifeval]==0.4.12",
+    "pyyaml==6.0.3",
+    "rdkit==2026.3.2",
+    "sentencepiece==0.2.1",
+    "tilelang==0.1.10",
+    "torch==2.9.0",
+    "torchaudio==2.9.0",
+    "torchvision==0.24.0",
+    "transformers==5.8.0",
+    "wandb==0.26.1",
+]
+
+[tool.uv]
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64' and implementation_name == 'cpython' and python_version == '3.12'",
+]
+no-build-isolation-package = ["flash-linear-attention"]
+
+[tool.uv.extra-build-dependencies]
+causal-conv1d = ["torch==2.9.0", "setuptools==84.0.0", "wheel==0.48.0", "packaging==26.3", "ninja==1.13.2", "psutil==7.2.2"]

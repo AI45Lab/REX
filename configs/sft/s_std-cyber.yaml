@@ -1,0 +1,38 @@
+# Public method example; supply your own data. Research data recipes are not released.
+data: data/user-sft.jsonl
+training_purpose: benign_sft
+seed: 42
+max_tokens: 250000000
+tokens_per_step: 500000
+save_token_milestones:
+- 250000000
+pack_length:
+  qwen3_5_moe: 31250
+  gemma4: 15625
+optimizer:
+  lr: 2.0e-06
+  min_lr: 1.0e-07
+  lr_decay_style: cosine
+  lr_warmup_fraction: 0.1
+  weight_decay: 0.05
+  clip_grad: 1.0
+  muon_momentum: 0.95
+  muon_use_nesterov: true
+  muon_scale_mode: spectral
+  muon_extra_scale_factor: 0.2
+  muon_scalar_optimizer: adam
+eval:
+  token_milestones:
+  - 0
+  - 10000000
+  - 50000000
+  - 100000000
+  - 250000000
+  tasks:
+  - wmdp_cyber
+  - mmlu
+  batch_size: 1
+  max_tokens_per_forward: 4096
+  limit: null
+  num_fewshot: null
+  seed: 42

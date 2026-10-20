@@ -1,0 +1,17 @@
+[project]
+name = "rex-excision"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+# huggingface-hub 1.14's CLI needs the pre-vendored Click integration in Typer.
+dependencies = ["torch==2.9.0", "safetensors==0.7.0", "huggingface-hub==1.14.0", "typer==0.25.1", "numpy==2.2.6"]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }

@@ -1,0 +1,35 @@
+[project]
+name = "rex-sft"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.10.0", "ms-swift", "mcore-bridge==1.6.1", "megatron-core==0.18.2",
+    "transformer-engine[core-cu12,pytorch]==2.17.0", "transformers==5.12.1",
+    "datasets==4.8.4", "accelerate==1.14.0", "numpy==2.2.6",
+    "lm-eval[hf,ifeval]==0.4.12", "emerging-optimizers", "flash-attn==2.8.3",
+    "causal-conv1d==1.6.2.post1", "flash-linear-attention==0.5.1",
+    "tilelang==0.1.10", "apache-tvm-ffi==0.1.11",
+    "sentencepiece==0.2.1", "rdkit==2026.3.2", "pyyaml==6.0.3", "safetensors==0.8.0",
+    "torchvision==0.25.0", "qwen-vl-utils==0.0.14", "decord==0.6.0",
+]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+no-build-isolation-package = ["flash-attn", "flash-linear-attention", "transformer-engine-torch"]
+
+[tool.uv.extra-build-dependencies]
+causal-conv1d = ["torch==2.10.0", "setuptools==84.0.0", "wheel==0.48.0", "packaging==26.3", "ninja==1.13.2", "psutil==7.2.2"]
+
+[tool.uv.sources]
+ms-swift = { git = "https://github.com/modelscope/ms-swift.git", rev = "565a1ad586a21d24b23931c52d2c62b49c39bee8" }
+emerging-optimizers = { git = "https://github.com/NVIDIA-NeMo/Emerging-Optimizers.git", rev = "633bb0d" }
+
+# TE's sdist metadata was generated with CUDA 13, but its setup.py selects
+# the core library from torch.version.cuda. Our pinned PyPI torch uses 12.8.
+[[tool.uv.dependency-metadata]]
+name = "transformer-engine-torch"
+version = "2.17.0"
+requires-dist = [
+    "torch>=2.1", "einops", "onnxscript", "onnx", "packaging", "pydantic",
+    "nvdlfw-inspect", "transformer-engine-cu12==2.17.0",
+]

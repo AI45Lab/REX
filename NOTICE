@@ -1,0 +1,8 @@
+REX
+Copyright 2026 Shanghai AI Laboratory
+
+This product includes a modified subset of XTuner, developed by OpenMMLab.
+See dataset/xtuner_vendor/LICENSE and dataset/xtuner_vendor/NOTICE.
+
+Model weights and tokenizer assets retain their upstream notices. The source
+code license does not replace the licenses of model or dataset inputs.
